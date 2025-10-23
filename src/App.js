@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PetSelection from './components/PetSelection';
 import MainPage from './components/MainPage';
-import './App.css';
+import './App.css'; 
 
 function App() {
   const [selectedPet, setSelectedPet] = useState(null);
