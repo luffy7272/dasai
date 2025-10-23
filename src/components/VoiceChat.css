@@ -1,0 +1,340 @@
+.voice-chat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.voice-chat-container {
+  width: 100%;
+  max-width: 800px;
+  height: 80vh;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.voice-chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pet-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.pet-avatar {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.pet-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+.control-btn,
+.close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.control-btn:hover,
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.control-btn.active {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.messages-container {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.message {
+  display: flex;
+  max-width: 70%;
+  animation: slideIn 0.3s ease-out;
+}
+
+.message.user {
+  align-self: flex-end;
+  justify-content: flex-end;
+}
+
+.message.pet {
+  align-self: flex-start;
+  justify-content: flex-start;
+}
+
+.message-content {
+  padding: 15px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.message.user .message-content {
+  background: linear-gradient(135deg, var(--pet-color, #4A90E2) 0%, #667eea 100%);
+  color: white;
+  border-bottom-right-radius: 5px;
+}
+
+.message.pet .message-content {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #2c3e50;
+  border-bottom-left-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.message.interim .message-content {
+  background: linear-gradient(135deg, rgba(var(--pet-color, 74, 144, 226), 0.3) 0%, rgba(102, 126, 234, 0.3) 100%);
+  color: #666;
+  border: 2px dashed var(--pet-color, #4A90E2);
+}
+
+.typing-cursor {
+  animation: blink 1s infinite;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* AI思考指示器 */
+.ai-thinking-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.thinking-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thinking-text {
+  color: var(--pet-color, #4A90E2);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.processing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(var(--pet-color, 74, 144, 226), 0.1);
+  border-radius: 15px;
+  align-self: center;
+  color: var(--pet-color, #4A90E2);
+  font-weight: 500;
+}
+
+.processing-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.processing-dots span {
+  width: 8px;
+  height: 8px;
+  background: var(--pet-color, #4A90E2);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.processing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.processing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.voice-controls {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.voice-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--pet-color, #4A90E2) 0%, #667eea 100%);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(var(--pet-color, 74, 144, 226), 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.voice-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(var(--pet-color, 74, 144, 226), 0.5);
+}
+
+.voice-btn.listening {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+}
+
+.listening-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.voice-hint {
+  font-size: 1rem;
+  color: #666;
+  text-align: center;
+  font-weight: 500;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .voice-chat-container {
+    height: 90vh;
+    margin: 10px;
+    border-radius: 20px;
+  }
+  
+  .voice-chat-header {
+    padding: 15px 20px;
+  }
+  
+  .pet-avatar {
+    font-size: 2rem;
+  }
+  
+  .pet-name {
+    font-size: 1.3rem;
+  }
+  
+  .messages-container {
+    padding: 20px;
+  }
+  
+  .message {
+    max-width: 85%;
+  }
+  
+  .message-content {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .voice-btn {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .voice-controls {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .voice-chat-overlay {
+    padding: 10px;
+  }
+  
+  .voice-chat-container {
+    height: 95vh;
+    border-radius: 15px;
+  }
+  
+  .messages-container {
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  .voice-btn {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .voice-hint {
+    font-size: 0.9rem;
+  }
+}

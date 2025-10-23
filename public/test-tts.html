@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTS API 测试</title>
+</head>
+<body>
+    <h1>TTS API 测试</h1>
+    <button onclick="testTTSAPI()">测试 TTS API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testTTSAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '测试中...';
+            
+            try {
+                console.log('🧪 开始测试TTS API...');
+                
+                const apiUrl = 'https://xbpethd.gaodun.com/api/leftsite-tts/convert';
+                const testData = {
+                    text: '测试',
+                    voice: 'zh-CN-XiaoxiaoNeural'
+                };
+                
+                console.log('🧪 API URL:', apiUrl);
+                console.log('🧪 请求数据:', testData);
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                console.log('🧪 响应状态:', response.status);
+                console.log('🧪 响应头:', Object.fromEntries(response.headers.entries()));
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('🧪 API错误:', errorText);
+                    resultDiv.innerHTML = `❌ API调用失败: ${response.status} - ${errorText}`;
+                    return;
+                }
+                
+                const blob = await response.blob();
+                console.log('🧪 音频数据:', {
+                    size: blob.size,
+                    type: blob.type
+                });
+                
+                if (blob.size === 0) {
+                    resultDiv.innerHTML = '❌ 返回的音频数据为空';
+                    return;
+                }
+                
+                // 创建音频URL并尝试播放
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio(audioUrl);
+                
+                audio.onloadstart = () => console.log('🎵 音频开始加载');
+                audio.oncanplay = () => console.log('🎵 音频可以播放');
+                audio.onplay = () => console.log('🎵 音频开始播放');
+                audio.onended = () => console.log('🎵 音频播放结束');
+                audio.onerror = (e) => {
+                    console.error('🎵 音频播放错误:', e);
+                    console.error('🎵 音频状态:', {
+                        readyState: audio.readyState,
+                        networkState: audio.networkState,
+                        error: audio.error
+                    });
+                };
+                
+                try {
+                    await audio.play();
+                    resultDiv.innerHTML = '✅ TTS API测试成功，音频正在播放';
+                } catch (playError) {
+                    console.error('🎵 播放失败:', playError);
+                    resultDiv.innerHTML = `❌ 音频播放失败: ${playError.message}`;
+                }
+                
+            } catch (error) {
+                console.error('🧪 测试错误:', error);
+                resultDiv.innerHTML = `❌ 测试失败: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

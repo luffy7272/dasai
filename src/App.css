@@ -1,0 +1,55 @@
+.App {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景动画 */
+.App::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  z-index: -2;
+}
+
+.App::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/public/网站首页背景图设计.png');
+  /* animation: twinkle 3s ease-in-out infinite alternate; */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  z-index: -1;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.8;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .App {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .App {
+    padding: 5px;
+  }
+}

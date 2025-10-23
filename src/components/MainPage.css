@@ -1,0 +1,256 @@
+.main-page {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 视频背景样式 */
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+/* 主要内容区域 */
+.main-content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* 背景装饰 */
+.background-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-element {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+/* 宠物展示区 */
+.pet-showcase {
+  text-align: center;
+  z-index: 10;
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.pet-avatar-large {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.pet-emoji-large {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.pet-welcome h2 {
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 1rem;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+}
+
+.pet-welcome p {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 宠物图片展示区域 */
+.pet-image-showcase {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pet-showcase-image {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  object-fit: cover;
+}
+
+.pet-showcase-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-message {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 1rem 1.5rem;
+  margin-top: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-message p {
+  color: #333;
+  font-size: 1.1rem;
+  margin: 0;
+  text-shadow: none;
+}
+
+/* 学习模块 */
+.learning-modules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  width: 100%;
+  padding: 0 20px;
+  z-index: 10;
+  position: relative;
+}
+
+.module-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.15s ease;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.module-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.module-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.module-card h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.module-card p {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 0 15px;
+    height: 60px;
+  }
+  
+  .pet-info-header {
+    font-size: 1rem;
+  }
+  
+  .pet-info-header .pet-emoji {
+    font-size: 1.5rem;
+  }
+  
+  .main-content {
+    padding-top: 80px;
+  }
+  
+  .pet-avatar-large {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .pet-emoji-large {
+    font-size: 4rem;
+  }
+  
+  .pet-welcome h2 {
+    font-size: 2rem;
+  }
+  
+  .pet-welcome p {
+    font-size: 1.1rem;
+  }
+  
+  .learning-modules {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 15px;
+  }
+  
+  .module-card {
+    padding: 1.5rem;
+  }
+  
+  .module-icon {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-nav {
+    padding: 0 10px;
+  }
+  
+  .back-btn span {
+    display: none;
+  }
+  
+  .pet-info-header {
+    font-size: 0.9rem;
+  }
+  
+  .pet-avatar-large {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .pet-emoji-large {
+    font-size: 3rem;
+  }
+  
+  .pet-welcome h2 {
+    font-size: 1.8rem;
+  }
+  
+  .welcome-message {
+    padding: 0.8rem 1rem;
+  }
+  
+  .welcome-message p {
+    font-size: 1rem;
+  }
+}
