@@ -27,11 +27,11 @@ const MainPage = ({ selectedPet }) => {
     
     testAPI();
     
-    const timer = setTimeout(() => {
-      speakText('你想和聪明的小狐狸茸茸、友好的小海豚闪闪，或者呆萌的小猫头鹰绒绒做朋友吗？');
-    }, 500);
+    // const timer = setTimeout(() => {
+    //   speakText('你想和聪明的小狐狸茸茸、友好的小海豚闪闪，或者呆萌的小猫头鹰绒绒做朋友吗？');
+    // }, 500);
 
-    return () => clearTimeout(timer);
+    // return () => clearTimeout(timer);
   }, []);
 
   const speakText = async (text, petType = 'fox') => {
