@@ -391,3 +391,8 @@
   }
 }
 
+@media (max-width: 1440px) {
+  .selection-container {
+    scale: 0.65;
+  }
+}

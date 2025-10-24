@@ -20,6 +20,7 @@ const VoiceChat = ({
   const [currentText, setCurrentText] = useState('');
   const recognitionRef = useRef(null);
   const synthRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   // 宠物信息配置
   const petConfig = {
@@ -47,6 +48,13 @@ const VoiceChat = ({
   };
 
   const currentPet = petConfig[selectedPet] || petConfig.fox;
+
+  // 自动滚动到底部的函数
+  const scrollToBottom = useCallback(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, []);
 
   // 初始化语音识别
   useEffect(() => {
@@ -137,6 +145,11 @@ const VoiceChat = ({
       speakText(welcomeMessage.text);
     }
   }, [isOpen, selectedPet, messages.length, speakText]);
+
+  // 监听messages变化，自动滚动到底部
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
 
   // 处理语音消息
   const handleVoiceMessage = useCallback(async (text) => {
@@ -237,7 +250,7 @@ const VoiceChat = ({
           </div>
 
           {/* 对话显示区 */}
-          <div className="messages-container">
+          <div className="messages-container" ref={messagesContainerRef}>
             {messages.map((message) => (
               <motion.div
                 key={message.id}

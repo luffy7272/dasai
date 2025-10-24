@@ -2,7 +2,6 @@
 class TTSService {
   constructor() {
     this.apiUrl = 'https://xbpethd.gaodun.com/api/leftsite-tts/convert';
-    this.baseUrl = 'https://xbpethd.gaodun.com'; // 基础URL用于拼接音频路径
     this.currentAudio = null;
     this.currentAudioUrl = null;
     this.loadTimeout = null; // 统一管理加载超时器
@@ -101,12 +100,13 @@ class TTSService {
         throw new Error(errorMsg);
       }
 
-      // 5. 拼接完整的音频URL
-      const audioPath = jsonResponse.result.audioUrl;
-      const fullAudioUrl = this.baseUrl + audioPath;
+      // 5. 直接使用audioUrl作为完整的音频地址
+      const audioUrl = jsonResponse.result.audioUrl;
+      // 确保URL包含协议前缀
+      const fullAudioUrl = audioUrl.startsWith('http') ? audioUrl : `http://${audioUrl}`;
       
       console.log('🎵 TTS音频信息:', {
-        audioPath: audioPath,
+        audioUrl: audioUrl,
         fullAudioUrl: fullAudioUrl,
         fileName: jsonResponse.result.fileName,
         size: jsonResponse.result.size,
@@ -155,9 +155,29 @@ class TTSService {
       this.currentAudio.preload = 'auto'; // 预加载（无需crossOrigin，除非明确跨域需求）
 
       // 4. 绑定音频事件（合并日志+逻辑，避免重复绑定）
-      // 4.1 加载成功：可播放时执行播放
+      // 4.1 加载开始事件
+      this.currentAudio.onloadstart = () => {
+        console.log('⏳ 音频开始加载...');
+      };
+
+      // 4.2 加载进度事件
+      this.currentAudio.onprogress = () => {
+        console.log('📊 音频加载中...', {
+          readyState: this.currentAudio.readyState,
+          networkState: this.currentAudio.networkState
+        });
+      };
+
+      // 4.3 加载成功：可播放时执行播放并清除超时器
       this.currentAudio.oncanplay = () => {
-        console.log('✅ 音频加载完成，开始播放');
+        console.log('✅ 音频加载完成，清除超时器，开始播放');
+        // 重要：清除超时器，避免误触发超时
+        if (this.loadTimeout) {
+          clearTimeout(this.loadTimeout);
+          this.loadTimeout = null;
+          console.log('🔄 超时器已清除');
+        }
+        
         this.currentAudio.play().catch(playErr => {
           console.error('❌ 音频播放命令失败:', playErr.message);
           this.cleanupAudio();
@@ -165,39 +185,52 @@ class TTSService {
         });
       };
 
-      // 4.2 播放中事件
+      // 4.4 播放中事件
       this.currentAudio.onplay = () => {
         console.log('▶️ 音频正在播放');
       };
 
-      // 4.3 播放结束：清理资源+触发回调
+      // 4.5 播放结束：清理资源+触发回调
       this.currentAudio.onended = () => {
         console.log('⏹️ 音频播放结束');
         this.cleanupAudio();
         onEnd?.();
       };
 
-      // 4.4 加载/播放错误：回退到浏览器合成
+      // 4.6 加载/播放错误：回退到浏览器合成
       this.currentAudio.onerror = (audioErr) => {
         const errorMsg = audioErr.target?.error 
           ? `代码${audioErr.target.error.code}：${this.getAudioErrorMsg(audioErr.target.error.code)}`
           : audioErr.message;
         console.error('❌ 音频加载/播放错误:', errorMsg);
+        console.error('🔍 音频状态详情:', {
+          readyState: this.currentAudio.readyState,
+          networkState: this.currentAudio.networkState,
+          src: this.currentAudio.src,
+          error: this.currentAudio.error
+        });
         this.cleanupAudio();
         this.fallbackToSpeechSynthesis(text, onStart, onEnd, onError);
       };
 
-      // 5. 加载超时控制（5秒未加载完成则回退）
-      this.loadTimeout = setTimeout(() => {
-        console.error('❌ 音频加载超时（5秒）');
-        this.cleanupAudio();
-        this.fallbackToSpeechSynthesis(text, onStart, onEnd, onError);
-      }, 5000);
-
-      // 6. 启动音频加载（最后执行，确保事件已绑定）
+      // 5. 启动音频加载（在设置超时器之前，确保事件已绑定）
       console.log('⏳ 开始加载音频:', audioUrl);
       this.currentAudio.src = audioUrl;
       this.currentAudio.load();
+
+      // 6. 加载超时控制（10秒未加载完成则回退，给网络更多时间）
+      this.loadTimeout = setTimeout(() => {
+        console.error('❌ 音频加载超时（10秒）');
+        console.error('🔍 超时时音频状态:', {
+          readyState: this.currentAudio?.readyState,
+          networkState: this.currentAudio?.networkState,
+          src: this.currentAudio?.src,
+          currentTime: this.currentAudio?.currentTime,
+          duration: this.currentAudio?.duration
+        });
+        this.cleanupAudio();
+        this.fallbackToSpeechSynthesis(text, onStart, onEnd, onError);
+      }, 10000);
 
     } catch (apiError) {
       // API调用失败：直接回退到浏览器语音合成
@@ -337,7 +370,8 @@ class TTSService {
                      jsonResponse.result.audioUrl;
       
       if (isValid) {
-        const fullAudioUrl = this.baseUrl + jsonResponse.result.audioUrl;
+        const audioUrl = jsonResponse.result.audioUrl;
+        const fullAudioUrl = audioUrl.startsWith('http') ? audioUrl : `http://${audioUrl}`;
         console.log('🧪 API测试成功:', {
           audioUrl: fullAudioUrl,
           fileName: jsonResponse.result.fileName,
