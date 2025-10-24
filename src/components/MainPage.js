@@ -34,6 +34,7 @@ const MainPage = ({ selectedPet }) => {
   //   return () => clearTimeout(timer);
   // }, []);
 
+  
   const speakText = async (text, petType = 'fox') => {
     try {
       console.log('🔊 MainPage speakText调用:', { text, petType });
